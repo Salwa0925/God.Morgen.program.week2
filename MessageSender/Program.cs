@@ -69,5 +69,5 @@ class Program
     }
 
 
-
+//  Hei. dette er en kommentar
 }
