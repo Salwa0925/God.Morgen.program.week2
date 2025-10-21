@@ -1,73 +1,118 @@
-﻿namespace AlphLetter;
+﻿using System;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
+
+namespace AlphLetter;
 
 class Program
 {
+     private static DayOfWeek dayGreetingHelper = new DayOfWeek();
+
+
+    //Used this to send a standard message with real time date.
     static void Main(string[] args)
     {
         var daygreetinghelper = new DayOfWeek();
-        daygreetinghelper.MessageOFTheDay();
+        daygreetinghelper.MessageOFTheDay();     //Used this to send a standard message with real time date.
+        
+        Console.WriteLine("Please logg in here!");
+        string brukernavn = Console.ReadLine() ?? "";
 
-        Console.WriteLine("Hello, Please logg in here!");
-        Console.ReadLine();
-
-        for (int i = 0; i < daygreetinghelper.Days.Length; i++)
+        //To prevent an empty username.
+        if (string.IsNullOrWhiteSpace(brukernavn))
         {
-            Console.WriteLine(daygreetinghelper.Days[i]);
-
-            var daylycharacters = daygreetinghelper.Characters[i % daygreetinghelper.Characters.Length][0];
-            Console.WriteLine(daylycharacters);
+            Console.WriteLine("No username entered.");
+            Console.WriteLine("Please try again!");
+            Console.ReadLine();
+            return;
         }
 
+
+         // Using (for) to reapete the (char) with the (string Days)in the code.
+        for (int i = 0; i < daygreetinghelper.Days.Length; i++)
+        {
+
+            var daylycharacters = daygreetinghelper.Characters[i % daygreetinghelper.Characters.Length];
+            
+
+         //For the program to connect the username to the message i used if statemant. (Help from ChatGPT)
+            if (Array.Exists(daylycharacters, c => c == char.ToLower(brukernavn[0])))
+            {
+                Console.WriteLine(dayGreetingHelper.FetchMessageBasedOnLetter(brukernavn[0]));
+            }
+        }
      
     }
 
 
-
+    
     public class DayOfWeek
     {
 
+        //To find the date IRT
+        public DateTime Today = DateTime.Now;
+
+
+        //Public void becouse this will be a standard start message 
+        // that wont be used anywhere else in the program.
         public void MessageOFTheDay()
         {
             string Message = ($"Good Morning today is ({Today:dddd, MMMM dd yyyy})! Have a blessed day.");
             Console.WriteLine(Message);
         }
-        
 
-        public DateTime Today = DateTime.Now;
 
-        public string[] Days = ["Monday", "Tusday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-        //List <String> days = ["Monday", "Tusday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+        public string[] Days =
+        ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"];
 
         public char[][] Characters =
          [
-            ['A', 'F', 'K', 'P', 'U']
-            ['B', 'G', 'L', 'Q', 'V']
-            ['C', 'H', 'M', 'R', 'W']
-            ['D', 'I', 'N', 'S', 'X']
-            ['E', 'J', 'O', 'T', 'Y', 'Z']
+            ['a', 'f', 'k', 'p', 'u'],
+            ['b', 'g', 'l', 'q', 'v'],
+            ['c', 'h', 'm', 'r', 'w'],
+            ['d', 'i', 'n', 's', 'x'],
+            ['e', 'j', 'o', 't', 'y', 'z'],
         ];
 
+
+
+ // Fetch message based on letter (Help from ChatGPT)
+    public string FetchMessageBasedOnLetter(char initial)
+    {
+        initial = char.ToLower(initial);
+        int dayIndex = (int)DateTime.Now.DayOfWeek; // 
+
+        for (int i = 0; i < Characters.Length; i++)
+        {   
+            if (Array.Exists(Characters[i], c => c == initial)) //her ser den om første bokstaven er i ett existing array. 
+            {
+                int index = (i + dayIndex) % MessagesList.Length;
+                return MessagesList[index]; //retunerer en melding basert på hvilken dag det er.
+            }
         
-        public string[][] MessageA = [
-                ["Today is for fresh starts and infinite possibilities. Embrace them with new energy!"]
+        }
 
-                ["Keep building momentum from yesterday. today is the day to make real progress." ]
+        return "Have a great day full of unexpected blessings!";
+    }   
+        public string[] MessagesList =
+            [
+                "The only way to do great work is to love what you do.", 
 
-                ["Hump day is here! You're halfway there. Keep pushing through with focused effort."]
+                "It always seems impossible until it's done.", 
 
-                ["Now is a great time to reflect on your progress and plan for an even better day."]
+                "Your time is limited, don't waste it living someone else's life.",  
 
-                ["Take time today to celebrate your wins and finish the week strong."]
+                "The best time to plant a tree was 20 years ago. The second best time is now.", 
+
+                "The future belongs to those who believe in the beauty of their dreams.",
 
 
-         ];
-       
-        
+            ];
 
-        
-  
     }
 
-
-//  Hei. dette er en kommentar
 }
+
+
+
