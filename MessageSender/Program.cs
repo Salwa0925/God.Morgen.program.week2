@@ -1,8 +1,6 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
+﻿
 
-namespace AlphLetter;
+namespace MessageSender;
 
 class Program
 {
@@ -19,12 +17,11 @@ class Program
         string brukernavn = Console.ReadLine() ?? "";
 
         //To prevent an empty username.
-        if (string.IsNullOrWhiteSpace(brukernavn))
+        while (string.IsNullOrWhiteSpace(brukernavn))
         {
             Console.WriteLine("No username entered.");
             Console.WriteLine("Please try again!");
-            Console.ReadLine();
-            return;
+            brukernavn = Console.ReadLine();
         }
 
 
@@ -51,7 +48,7 @@ class Program
 
         //To find the date IRT
         public DateTime Today = DateTime.Now;
-
+        
 
         //Public void becouse this will be a standard start message 
         // that wont be used anywhere else in the program.
